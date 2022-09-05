@@ -1,0 +1,11 @@
+name: cvscans
+title:
+username:
+account: jonathan-man
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6924987
+bundleId: 6271284
+url: https://jonathan-man.shinyapps.io/cvscans/
+when: 1662409248.02623
+lastSyncTime: 1662409248.02625
