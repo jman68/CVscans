@@ -1,2 +1,3 @@
 # Launch the ShinyApp
-CVscans::launch_app()
+source(file.path(getwd(), "R/data_processing_fn.R"))
+shinyApp(ui = ui, server = server)

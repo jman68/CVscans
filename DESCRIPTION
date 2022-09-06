@@ -10,7 +10,9 @@ Depends:
     readxl,
     writexl,
     dplyr,
-    tidyr
+    tidyr,
+    zip,
+    shinydashboard
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

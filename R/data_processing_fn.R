@@ -1,12 +1,9 @@
-#' Postprocess CV scan data
-#'
-#' @param pre_workup dataframe of raw CV data
-#' @param rhe user inputted value of reference electrode shift
-#'
-#' @return post-processed CV data with one column per scan (excluding scan 1)
-#'
-#' @import dplyr tidyr
-#' @export
+library(dplyr)
+library(tidyr)
+library(zip)
+library(ggplot2)
+library(plotly)
+
 cv_postprocess <- function(pre_workup,
                            rhe) {
 
@@ -25,14 +22,13 @@ cv_postprocess <- function(pre_workup,
 
   # reset index by scan number and set potential (V vs RHE)
   pre1 <- pre %>%
-    rename(Potential = `Potential applied (V)`) %>%
-    mutate(`Potential (V vs RHE)` = Potential + rhe) %>%
-    relocate(Potential, `Potential (V vs RHE)`)
+    mutate(`Potential (V vs RHE)` = `Potential applied (V)` + rhe) %>%
+    relocate(`Potential applied (V)`, `Potential (V vs RHE)`)
   pre1$Index <- rep.int(1:n_index, n_scans)
 
   # select relevant columns and spread and rename scan columns
   pre2 <- pre1 %>%
-    select(Potential, `Potential (V vs RHE)`, `WE(1).Current (A)`, Scan, Index) %>%
+    select(`Potential applied (V)`, `Potential (V vs RHE)`, `WE(1).Current (A)`, Scan, Index) %>%
     spread(Scan, `WE(1).Current (A)`) %>%
     rename_at(vars(-(1:3)), ~ paste0("Scan ", .)) %>%
     arrange(Index)
@@ -46,5 +42,24 @@ cv_postprocess <- function(pre_workup,
 
   # return output
   return(pre3)
+}
+
+
+plot_cv <- function(df,
+                    rhe) {
+
+  # pre-process data
+  df1 <- df %>%
+    filter(Scan != 1) %>%
+    mutate(`Potential (V vs RHE)` = `Potential applied (V)` + rhe,
+           Scan = as.character(Scan)) %>%
+    relocate(`Potential applied (V)`, `Potential (V vs RHE)`)
+
+  # plotly wrapper of geom_path to get continuous CV curve
+  plotly::ggplotly(
+    ggplot2::ggplot(data = df1) +
+      geom_path(aes(`Potential (V vs RHE)`, `WE(1).Current (A)`, color = Scan), size=0.1) +
+      labs(title = "CV Plot", x = "Potential (V vs RHE)", y = "Current (A)")
+  )
 }
 

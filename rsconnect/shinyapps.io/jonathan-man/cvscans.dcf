@@ -4,8 +4,8 @@ username:
 account: jonathan-man
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 6924987
-bundleId: 6271284
+appId: 6925229
+bundleId: 6271578
 url: https://jonathan-man.shinyapps.io/cvscans/
-when: 1662409248.02623
-lastSyncTime: 1662409248.02625
+when: 1662418092.16843
+lastSyncTime: 1662418092.16845
